@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Fallouh Tic Tac Toe Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Fonts and Styles -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            scroll-behavior: smooth;
+        }
+        .navbar {
+            background-color: #00695c;
+        }
+        .navbar-brand {
+            color: #ffffff !important;
+            transition: color 0.3s ease;
+        }
+        .navbar-brand:hover {
+            color: #ffeb3b !important;
+        }
+        .nav-link {
+            color: #ffffff !important;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #ffeb3b !important;
+        }
+        .header {
+            background-color: #00796b;
+            color: #ffffff;
+            padding: 50px 0;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .header h1:hover {
+            transform: scale(1.05);
+        }
+        .btn-primary, .btn-success {
+            background-color: #00796b;
+            border-color: #00796b;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .btn-primary:hover, .btn-success:hover {
+            background-color: #004d40;
+            transform: scale(1.05);
+        }
+        .btn-download {
+            background-color: #388e3c;
+            border-color: #388e3c;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .btn-download:hover {
+            background-color: #2e7d32;
+            transform: scale(1.05);
+        }
+        .highlight-link {
+            color: #d32f2f;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .highlight-link:hover {
+            color: #b71c1c;
+            text-decoration: underline;
+        }
+        .tic-tac-toe-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+        .tic-tac-toe-cell {
+            width: 100px;
+            height: 100px;
+            background-color: #00796b;
+            color: #ffffff;
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .tic-tac-toe-cell:hover {
+            background-color: #004d40;
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #00695c;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="#">James Fallouh Tic Tac Toe</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#footer">About Me</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#game">Tic Tac Toe</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#download-cv">Download CV</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact Me</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Welcome to James Fallouh Tic Tac Toe</h1>
+        <p>Play a fun game of Tic Tac Toe and explore more about me!</p>
+    </div>
+
+    <div class="container mt-5 pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Tic Tac Toe Game Section -->
+                <section id="game" class="my-5">
+                    <h2 class="text-center">Tic Tac Toe</h2>
+                    <div class="tic-tac-toe-board" id="board">
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 0)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 1)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 2)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 3)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 4)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 5)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 6)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 7)"></div>
+                        <div class="tic-tac-toe-cell" onclick="makeMove(this, 8)"></div>
+                    </div>
+                    <p id="gameStatus" class="text-center font-weight-bold mt-4"></p>
+                    <button class="btn btn-primary btn-block mt-4" onclick="resetGame()">Reset Game</button>
+                </section>
+
+                <script>
+                    let currentPlayer = "X";
+                    let gameBoard = ["", "", "", "", "", "", "", "", ""];
+                    let gameActive = true;
+
+                    function makeMove(cell, index) {
+                        if (gameBoard[index] === "" && gameActive) {
+                            gameBoard[index] = currentPlayer;
+                            cell.innerHTML = currentPlayer;
+                            checkResult();
+                            currentPlayer = currentPlayer === "X" ? "O" : "X";
+                        }
+                    }
+
+                    function checkResult() {
+                        const winConditions = [
+                            [0, 1, 2],
+                            [3, 4, 5],
+                            [6, 7, 8],
+                            [0, 3, 6],
+                            [1, 4, 7],
+                            [2, 5, 8],
+                            [0, 4, 8],
+                            [2, 4, 6]
+                        ];
+
+                        for (const condition of winConditions) {
+                            const [a, b, c] = condition;
+                            if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                                gameActive = false;
+                                document.getElementById("gameStatus").innerHTML = `Player ${gameBoard[a]} wins!`;
+                                return;
+                            }
+                        }
+
+                        if (!gameBoard.includes("")) {
+                            gameActive = false;
+                            document.getElementById("gameStatus").innerHTML = "It's a tie!";
+                        }
+                    }
+
+                    function resetGame() {
+                        gameBoard = ["", "", "", "", "", "", "", "", ""];
+                        currentPlayer = "X";
+                        gameActive = true;
+                        document.getElementById("gameStatus").innerHTML = "";
+                        document.querySelectorAll(".tic-tac-toe-cell").forEach(cell => cell.innerHTML = "");
+                    }
+                </script>
+
+                <!-- Download CV Section -->
+                <section id="download-cv" class="text-center my-5">
+                    <h2>If you like this project, feel free to download my CV:</h2>
+                    <a href="cv.pdf" class="btn btn-download mt-3" download>Download My CV</a>
+                </section>
+
+                <!-- Contact Form Section -->
+                <section id="contact" class="bg-white p-4 shadow-sm rounded">
+                    <h2 class="text-center">Contact Me</h2>
+                    <form action="https://formspree.io/f/xdknzyvv" method="POST">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" name="email" id="email" required>
+                        </div>
+                        <div class="form-group
+
+">
+                            <label for="message">Message:</label>
+                            <textarea class="form-control" name="message" id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Send</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5" id="footer">
+        <p>Created by James Fallouh</p>
+        <p><a href="https://jfallouh.github.io/JFallouh.github.my-CV/#english" class="highlight-link" target="_blank">Visit My Website</a></p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
